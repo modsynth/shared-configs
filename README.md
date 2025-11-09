@@ -11,6 +11,7 @@ This repository contains standardized configuration files for code quality and c
 - **ESLint Configurations** - Code linting for JavaScript/TypeScript
 - **Prettier Configurations** - Code formatting
 - **TypeScript Configurations** - TypeScript compiler options
+- **GitHub Actions Workflows** - CI/CD pipeline templates
 
 ## Installation
 
@@ -215,28 +216,50 @@ Recommended VS Code extensions:
 - `dbaeumer.vscode-eslint`
 - `esbenp.prettier-vscode`
 
-## CI/CD Integration
+## GitHub Actions Workflows
 
-### GitHub Actions Example
+Modsynth provides ready-to-use CI/CD workflow templates in the `github-actions/` directory.
 
-```yaml
-name: Lint and Format Check
+### Available Workflows
 
-on: [push, pull_request]
+1. **`go-ci.yml`** - Go project CI/CD
+   - Multi-version testing (Go 1.21, 1.22)
+   - Static analysis (go vet, staticcheck)
+   - golangci-lint
+   - Test coverage with Codecov
+   - Build validation
 
-jobs:
-  quality:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run format:check
-      - run: npm run type-check
+2. **`node-ci.yml`** - Node.js/TypeScript project CI/CD
+   - Multi-version testing (Node 18.x, 20.x, 21.x)
+   - ESLint and type checking
+   - Test coverage with Codecov
+   - Build validation
+   - Automatic npm publishing on tag push
+
+3. **`release.yml`** - Automated GitHub Releases
+   - Creates releases on tag push
+   - Generates changelog automatically
+   - Supports pre-releases (alpha, beta, rc)
+
+### Quick Setup
+
+For detailed instructions, see [`github-actions/README.md`](github-actions/README.md).
+
+**Go Project:**
+```bash
+mkdir -p .github/workflows
+cp path/to/shared-configs/github-actions/go-ci.yml .github/workflows/
+cp path/to/shared-configs/github-actions/release.yml .github/workflows/
 ```
+
+**TypeScript Project:**
+```bash
+mkdir -p .github/workflows
+cp path/to/shared-configs/github-actions/node-ci.yml .github/workflows/
+cp path/to/shared-configs/github-actions/release.yml .github/workflows/
+```
+
+See the [GitHub Actions README](github-actions/README.md) for complete documentation.
 
 ## Migration Guide
 
@@ -297,12 +320,18 @@ shared-configs/
 │   ├── tsconfig.base.json       # Base compiler options
 │   ├── tsconfig.react.json      # React compiler options
 │   └── tsconfig.node.json       # Node.js compiler options
+├── github-actions/
+│   ├── go-ci.yml                # Go CI/CD workflow
+│   ├── node-ci.yml              # Node.js CI/CD workflow
+│   ├── release.yml              # Release automation
+│   └── README.md                # Workflow documentation
 ├── package.json
 └── README.md
 ```
 
 ## Version History
 
+- **v0.2.0** - Added GitHub Actions CI/CD workflow templates
 - **v0.1.0** - Initial release with ESLint, Prettier, and TypeScript configs
 
 ## Contributing
